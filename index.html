@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CORESA × Odoo 17 — Transformación Digital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --odoo-purple: #714B67;
+      --odoo-dark: #1C1C2E;
+      --odoo-accent: #017E84;
+      --odoo-gold: #F5A623;
+      --odoo-light: #F0EDF3;
+      --odoo-green: #28B67C;
+      --text-main: #E8E4F0;
+      --text-muted: #9D90A8;
+      --card-bg: rgba(255,255,255,0.04);
+      --border: rgba(113,75,103,0.35);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--odoo-dark);
+      color: var(--text-main);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: .4;
+    }
+
+    /* ── NAV ── */
+    .navbar {
+      background: rgba(28,28,46,0.85);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 0;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+    }
+    .navbar-brand {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 3px;
+      color: var(--text-main) !important;
+    }
+    .navbar-brand span { color: var(--odoo-gold); }
+    .nav-link {
+      color: var(--text-muted) !important;
+      font-size: .85rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color .3s;
+    }
+    .nav-link:hover { color: var(--odoo-gold) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      padding: 120px 0 80px;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 50%, rgba(113,75,103,0.25) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 80% 30%, rgba(1,126,132,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 50% 100%, rgba(245,166,35,0.08) 0%, transparent 60%);
+    }
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(113,75,103,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(113,75,103,0.08) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(245,166,35,0.12);
+      border: 1px solid rgba(245,166,35,0.3);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: .75rem;
+      font-weight: 500;
+      color: var(--odoo-gold);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      animation: fadeUp .8s ease both;
+    }
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      line-height: .92;
+      letter-spacing: 2px;
+      animation: fadeUp .9s ease .1s both;
+    }
+    .hero h1 .accent { color: var(--odoo-gold); }
+    .hero h1 .accent2 { color: var(--odoo-accent); }
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 520px;
+      line-height: 1.7;
+      margin-top: 1.5rem;
+      animation: fadeUp 1s ease .2s both;
+    }
+    .hero-cta {
+      margin-top: 2.5rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      animation: fadeUp 1s ease .35s both;
+    }
+    .btn-primary-custom {
+      background: var(--odoo-gold);
+      color: #1C1C2E;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: .9rem;
+      letter-spacing: .5px;
+      text-decoration: none;
+      transition: transform .2s, box-shadow .2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-primary-custom:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(245,166,35,0.35);
+      color: #1C1C2E;
+    }
+    .btn-outline-custom {
+      background: transparent;
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      padding: 14px 32px;
+      border-radius: 6px;
+      font-weight: 400;
+      font-size: .9rem;
+      text-decoration: none;
+      transition: border-color .2s, color .2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-outline-custom:hover {
+      border-color: var(--odoo-purple);
+      color: var(--text-main);
+    }
+
+    /* HERO FLOW DIAGRAM */
+    .hero-visual {
+      position: relative;
+      animation: fadeUp 1s ease .4s both;
+    }
+    .flow-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: border-color .3s, background .3s;
+      cursor: default;
+    }
+    .flow-card:hover {
+      border-color: var(--odoo-gold);
+      background: rgba(245,166,35,0.06);
+    }
+    .flow-card .icon-wrap {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .flow-card .label { font-size: .82rem; color: var(--text-muted); line-height: 1.2; }
+    .flow-card .val { font-size: .95rem; font-weight: 500; color: var(--text-main); }
+    .flow-arrow {
+      text-align: center;
+      color: var(--odoo-purple);
+      font-size: 1.2rem;
+      padding: 4px 0;
+    }
+
+    /* ── STATS ── */
+    .stats-section {
+      padding: 60px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .stat-item { text-align: center; padding: 20px; }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3.5rem;
+      line-height: 1;
+      color: var(--odoo-gold);
+    }
+    .stat-label { font-size: .8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-top: 6px; }
+
+    /* ── SECTION TITLE ── */
+    .section-eyebrow {
+      font-size: .72rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--odoo-gold);
+      font-weight: 500;
+      margin-bottom: .6rem;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      letter-spacing: 1px;
+      line-height: 1;
+    }
+    .section-title .hi { color: var(--odoo-accent); }
+
+    /* ── PROCESS FLOW SECTION ── */
+    .process-section { padding: 100px 0; position: relative; }
+    .process-lane {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 24px;
+      height: 100%;
+      transition: transform .3s, border-color .3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .process-lane::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: 16px 16px 0 0;
+    }
+    .lane-ventas::before { background: linear-gradient(90deg, #F5A623, #FF6B35); }
+    .lane-inventario::before { background: linear-gradient(90deg, #017E84, #00B8C4); }
+    .lane-fabricacion::before { background: linear-gradient(90deg, #714B67, #B06EA0); }
+    .lane-compras::before { background: linear-gradient(90deg, #28B67C, #5DD68C); }
+    .lane-contabilidad::before { background: linear-gradient(90deg, #5469D4, #7B8EF5); }
+
+    .process-lane:hover {
+      transform: translateY(-4px);
+      border-color: rgba(245,166,35,0.4);
+    }
+    .lane-icon {
+      font-size: 2rem;
+      margin-bottom: 14px;
+      display: block;
+      line-height: 1;
+    }
+    .lane-icon svg { width: 36px; height: 36px; }
+    .module-icon-wrap svg { width: 28px; height: 28px; }
+    .lane-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+    .lane-steps { list-style: none; padding: 0; }
+    .lane-steps li {
+      font-size: .83rem;
+      color: var(--text-muted);
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .lane-steps li:last-child { border-bottom: none; }
+    .lane-steps li::before {
+      content: '→';
+      color: var(--odoo-gold);
+      flex-shrink: 0;
+      font-size: .75rem;
+      margin-top: 1px;
+    }
+
+    /* ── MODULES SECTION ── */
+    .modules-section { padding: 100px 0; position: relative; }
+    .module-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 28px;
+      height: 100%;
+      transition: transform .3s, border-color .3s, background .3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .module-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 120px;
+      background: linear-gradient(to top, rgba(113,75,103,0.08), transparent);
+      pointer-events: none;
+    }
+    .module-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--odoo-purple);
+      background: rgba(113,75,103,0.08);
+    }
+    .module-icon-wrap {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    .module-card h4 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+    .module-card p { font-size: .87rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px; }
+    .feature-pill {
+      display: inline-block;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 100px;
+      padding: 4px 12px;
+      font-size: .72rem;
+      color: var(--text-muted);
+      margin: 3px 2px;
+      font-family: 'DM Mono', monospace;
+    }
+    .module-badge {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(40,182,124,0.15);
+      border: 1px solid rgba(40,182,124,0.3);
+      color: var(--odoo-green);
+      font-size: .65rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 100px;
+    }
+
+    /* ── FLOW DIAGRAM SVG SECTION ── */
+    .flow-section { padding: 100px 0; position: relative; }
+    .flow-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 80px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .flow-diagram {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      position: relative;
+    }
+    .flow-col { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .flow-col-header {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: .7rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .flow-node {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(113,75,103,0.4);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: .7rem;
+      color: var(--text-muted);
+      width: 100%;
+      text-align: center;
+      transition: background .3s, border-color .3s;
+    }
+    .flow-node:hover { background: rgba(113,75,103,0.2); border-color: var(--odoo-gold); color: var(--text-main); }
+
+    /* ── TIMELINE ── */
+    .timeline-section { padding: 100px 0; }
+    .timeline {
+      position: relative;
+      padding-left: 30px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--odoo-gold), var(--odoo-accent), var(--odoo-purple));
+    }
+    .timeline-item {
+      position: relative;
+      padding-bottom: 48px;
+      padding-left: 30px;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -7px;
+      top: 6px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--odoo-gold);
+      border: 2px solid var(--odoo-dark);
+    }
+    .timeline-item:nth-child(2)::before { background: var(--odoo-accent); }
+    .timeline-item:nth-child(3)::before { background: var(--odoo-purple); }
+    .timeline-item:nth-child(4)::before { background: var(--odoo-green); }
+    .timeline-phase {
+      font-size: .7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--odoo-gold);
+      margin-bottom: 4px;
+    }
+    .timeline-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .timeline-desc { font-size: .87rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* ── CTA SECTION ── */
+    .cta-section {
+      padding: 120px 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(ellipse, rgba(113,75,103,0.2) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-section h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 7vw, 6rem);
+      letter-spacing: 2px;
+      line-height: 1;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+      font-size: .8rem;
+      color: var(--text-muted);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse-ring {
+      0%   { transform: scale(1); opacity: .6; }
+      100% { transform: scale(1.6); opacity: 0; }
+    }
+    .pulse-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: var(--odoo-green);
+      border-radius: 50%;
+      position: relative;
+    }
+    .pulse-dot::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 1px solid var(--odoo-green);
+      animation: pulse-ring 1.5s ease-out infinite;
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .flow-diagram { grid-template-columns: 1fr 1fr; }
+      .hero h1 { font-size: 3.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="#">CORE<span>SA</span></a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon" style="filter: invert(1)"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto gap-2">
+        <li class="nav-item"><a class="nav-link" href="#proceso">Proceso</a></li>
+        <li class="nav-item"><a class="nav-link" href="#modulos">Módulos</a></li>
+        <li class="nav-item"><a class="nav-link" href="#implementacion">Implementación</a></li>
+        <li class="nav-item ms-3">
+          <a href="http://3.149.3.222:8068/web/login?db=coresa_prueba" target="_blank" class="btn-primary-custom" style="padding: 10px 20px; border-radius: 6px; font-size:.82rem;">
+            Solicitar Demo
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="container position-relative">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <div class="hero-tag">
+          <span class="pulse-dot"></span>
+          Propuesta de Implementación 2025
+        </div>
+        <h1>
+          ODOO 17<br/>
+          <span class="accent">PARA</span><br/>
+          <span class="accent2">CORESA</span>
+        </h1>
+        <p class="hero-sub">
+          Transformación digital completa del ciclo Order-to-Delivery. Integramos Ventas, Inventario, Fabricación, Compras y Contabilidad en una sola plataforma.
+        </p>
+        <div class="hero-cta">
+          <a href="#modulos" class="btn-primary-custom">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm8 0A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3z"/></svg> Ver Módulos
+          </a>
+          <a href="#proceso" class="btn-outline-custom">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M6 3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5v1A1.5 1.5 0 0 1 8.5 6v1H14a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0v-1A.5.5 0 0 1 2 7h5.5V6A1.5 1.5 0 0 1 6 4.5v-1zM8.5 5a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1zM0 11.5A1.5 1.5 0 0 1 1.5 10h1A1.5 1.5 0 0 1 4 11.5v1A1.5 1.5 0 0 1 2.5 14h-1A1.5 1.5 0 0 1 0 12.5v-1zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zm4.5.5A1.5 1.5 0 0 1 7.5 10h1a1.5 1.5 0 0 1 1.5 1.5v1A1.5 1.5 0 0 1 8.5 14h-1A1.5 1.5 0 0 1 6 12.5v-1zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zm4.5.5a1.5 1.5 0 0 1 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5v-1zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1z"/></svg> Ver Proceso
+          </a>
+        </div>
+      </div>
+      <div class="col-lg-6 hero-visual">
+        <div class="d-flex flex-column gap-2">
+          <!-- Mini flow cards -->
+          <div class="row g-2">
+            <div class="col-6">
+              <div class="flow-card">
+                <div class="icon-wrap" style="background:rgba(245,166,35,0.15);">🛒</div>
+                <div>
+                  <div class="label">Inicio del ciclo</div>
+                  <div class="val">Pedido de Venta</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="flow-card">
+                <div class="icon-wrap" style="background:rgba(1,126,132,0.15);">📦</div>
+                <div>
+                  <div class="label">Control</div>
+                  <div class="val">Verificación de Stock</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flow-arrow"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/></svg></div>
+          <div class="row g-2">
+            <div class="col-6">
+              <div class="flow-card">
+                <div class="icon-wrap" style="background:rgba(113,75,103,0.2);">⚙️</div>
+                <div>
+                  <div class="label">Producción</div>
+                  <div class="val">Orden de Fabricación</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="flow-card">
+                <div class="icon-wrap" style="background:rgba(40,182,124,0.15);">🚚</div>
+                <div>
+                  <div class="label">Logística</div>
+                  <div class="val">Planificación de Ruta</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flow-arrow"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/></svg></div>
+          <div class="flow-card" style="border-color: rgba(40,182,124,0.4);">
+            <div class="icon-wrap" style="background:rgba(40,182,124,0.15); font-size:1.4rem;">✅</div>
+            <div class="flex-grow-1">
+              <div class="label">Cierre del ciclo</div>
+              <div class="val">Factura Emitida → Pago Registrado → Asiento Contable</div>
+            </div>
+          </div>
+          <!-- Stats mini -->
+          <div class="row g-2 mt-2">
+            <div class="col-4">
+              <div class="text-center p-3" style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;">
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--odoo-gold);">5</div>
+                <div style="font-size:.68rem;color:var(--text-muted);letter-spacing:1px;">MÓDULOS</div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="text-center p-3" style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;">
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--odoo-accent);">100%</div>
+                <div style="font-size:.68rem;color:var(--text-muted);letter-spacing:1px;">INTEGRADO</div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="text-center p-3" style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;">
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--odoo-green);">0</div>
+                <div style="font-size:.68rem;color:var(--text-muted);letter-spacing:1px;">SILOS</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-section">
+  <div class="container">
+    <div class="row g-0 text-center">
+      <div class="col-6 col-md-3 stat-item reveal">
+        <div class="stat-num">5</div>
+        <div class="stat-label">Módulos Requeridos</div>
+      </div>
+      <div class="col-6 col-md-3 stat-item reveal">
+        <div class="stat-num" style="color:var(--odoo-accent);">20+</div>
+        <div class="stat-label">Procesos Automatizados</div>
+      </div>
+      <div class="col-6 col-md-3 stat-item reveal">
+        <div class="stat-num" style="color:var(--odoo-purple);">1</div>
+        <div class="stat-label">Plataforma Unificada</div>
+      </div>
+      <div class="col-6 col-md-3 stat-item reveal">
+        <div class="stat-num" style="color:var(--odoo-green);">∞</div>
+        <div class="stat-label">Escalabilidad</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS SECTION -->
+<section class="process-section" id="proceso">
+  <div class="container">
+    <div class="text-center mb-5 reveal">
+      <div class="section-eyebrow">Flujo Completo</div>
+      <h2 class="section-title">EL CICLO <span class="hi">ORDER-TO-DELIVERY</span></h2>
+      <p class="mt-3" style="color:var(--text-muted);max-width:560px;margin:auto;font-size:.9rem;">
+        Cada departamento de CORESA conectado en tiempo real. Sin duplicación de datos, sin procesos manuales.
+      </p>
+    </div>
+    <div class="row g-4">
+      <!-- VENTAS -->
+      <div class="col-md-6 col-lg-4 reveal">
+        <div class="process-lane lane-ventas h-100">
+          <span class="lane-icon"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="#F5A623" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M10.854 8.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708 0z"/><path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5z"/></svg></span>
+          <div class="lane-title" style="color:#F5A623;">Ventas</div>
+          <ul class="lane-steps">
+            <li>Creación de Presupuesto / Pedido de Venta</li>
+            <li>Confirmación del Pedido por el cliente</li>
+            <li>Generación automática de documentos internos</li>
+            <li>Trazabilidad completa desde cotización</li>
+          </ul>
+        </div>
+      </div>
+      <!-- INVENTARIO -->
+      <div class="col-md-6 col-lg-4 reveal">
+        <div class="process-lane lane-inventario h-100">
+          <span class="lane-icon"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="#017E84" viewBox="0 0 16 16"><path d="M7.752.066a.5.5 0 0 1 .496 0l3.75 2.143a.5.5 0 0 1 .252.434v3.995l3.498 2A.5.5 0 0 1 16 9.07v4.286a.5.5 0 0 1-.252.434l-3.75 2.143a.5.5 0 0 1-.496 0l-3.502-2-3.502 2a.5.5 0 0 1-.496 0l-3.75-2.143A.5.5 0 0 1 0 13.357V9.071a.5.5 0 0 1 .252-.434L3.75 6.638V2.643a.5.5 0 0 1 .252-.434L7.752.066ZM4.25 7.504 1.508 9.071l2.742 1.567 2.742-1.567L4.25 7.504ZM7.5 9.933l-2.75 1.571v3.134l2.75-1.571V9.933Zm1 3.134 2.75 1.571v-3.134L8.5 9.933v3.134Zm.508-3.996 2.742 1.567 2.742-1.567-2.742-1.567-2.742 1.567Zm1.242-2.433V3.504L8 5.076 5.75 3.504v3.134l2.25 1.286 2.25-1.286ZM8 4.07l2.742-1.567L8 .936 5.258 2.503 8 4.07Z"/></svg></span>
+          <div class="lane-title" style="color:#017E84;">Inventario</div>
+          <ul class="lane-steps">
+            <li>Verificación automática de stock disponible</li>
+            <li>Generación del Albarán de Salida</li>
+            <li>Planificación de rutas de picking</li>
+            <li>Gestión de ubicaciones (WH) en bodega</li>
+            <li>Recepción de mercancía de compras</li>
+          </ul>
+        </div>
+      </div>
+      <!-- FABRICACIÓN -->
+      <div class="col-md-6 col-lg-4 reveal">
+        <div class="process-lane lane-fabricacion h-100">
+          <span class="lane-icon"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="#B06EA0" viewBox="0 0 16 16"><path d="M7.068.727c.243-.97 1.62-.97 1.864 0l.071.286a.96.96 0 0 0 1.622.434l.205-.211c.695-.719 1.888-.03 1.613.931l-.08.284a.96.96 0 0 0 1.187 1.187l.283-.081c.96-.275 1.65.918.931 1.613l-.211.205a.96.96 0 0 0 .434 1.622l.286.071c.97.243.97 1.62 0 1.864l-.286.071a.96.96 0 0 0-.434 1.622l.211.205c.719.695.03 1.888-.931 1.613l-.284-.08a.96.96 0 0 0-1.187 1.187l.081.283c.275.96-.918 1.65-1.613.931l-.205-.211a.96.96 0 0 0-1.622.434l-.071.286c-.243.97-1.62.97-1.864 0l-.071-.286a.96.96 0 0 0-1.622-.434l-.205.211c-.695.719-1.888.03-1.613-.931l.08-.284a.96.96 0 0 0-1.187-1.187l-.283.081c-.96.275-1.65-.918-.931-1.613l.211-.205a.96.96 0 0 0-.434-1.622l-.286-.071c-.97-.243-.97-1.62 0-1.864l.286-.071a.96.96 0 0 0 .434-1.622l-.211-.205c-.719-.695-.03-1.888.931-1.613l.284.08a.96.96 0 0 0 1.187-1.187l-.081-.283c-.275-.96.918-1.65 1.613-.931l.205.211a.96.96 0 0 0 1.622-.434l.071-.286zM8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z"/></svg></span>
+          <div class="lane-title" style="color:#B06EA0;">Fabricación</div>
+          <ul class="lane-steps">
+            <li>Generación de Orden de Fabricación (OF)</li>
+            <li>Listas de Materiales (BOM) y validación</li>
+            <li>Planificación de Órdenes de Trabajo (Rutas)</li>
+            <li>Registro de Producción y Cierre</li>
+            <li>Control de Calidad WIP</li>
+          </ul>
+        </div>
+      </div>
+      <!-- COMPRAS -->
+      <div class="col-md-6 col-lg-4 reveal">
+        <div class="process-lane lane-compras h-100">
+          <span class="lane-icon"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="#28B67C" viewBox="0 0 16 16"><path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5v-7zm1.294 7.456A1.999 1.999 0 0 1 4.732 11h5.536a2.01 2.01 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456zM12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12v4zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/></svg></span>
+          <div class="lane-title" style="color:#28B67C;">Compras</div>
+          <ul class="lane-steps">
+            <li>Solicitud de Presupuesto a Proveedor (RFQ)</li>
+            <li>Cotización y Confirmación de Compra</li>
+            <li>Generación de Pedido de Compra (PO)</li>
+            <li>Envío automático al proveedor vía Odoo</li>
+            <li>Recepción y validación de mercancía</li>
+          </ul>
+        </div>
+      </div>
+      <!-- CONTABILIDAD -->
+      <div class="col-md-6 col-lg-4 reveal">
+        <div class="process-lane lane-contabilidad h-100">
+          <span class="lane-icon"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="#7B8EF5" viewBox="0 0 16 16"><path d="M11 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h1V7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7h1V2z"/></svg></span>
+          <div class="lane-title" style="color:#7B8EF5;">Contabilidad</div>
+          <ul class="lane-steps">
+            <li>Creación y envío de factura al cliente</li>
+            <li>Validación de factura de proveedor (Matching 3-vías)</li>
+            <li>Registro de Pagos en Tesorería</li>
+            <li>Generación de Asiento Contable automático</li>
+          </ul>
+        </div>
+      </div>
+      <!-- INTEGRACIÓN -->
+      <div class="col-md-6 col-lg-4 reveal">
+        <div class="process-lane h-100" style="border-color:rgba(245,166,35,0.4);background:rgba(245,166,35,0.04);">
+          <span class="lane-icon"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="var(--odoo-gold)" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M6 3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5v1A1.5 1.5 0 0 1 8.5 6v1H14a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0v-1A.5.5 0 0 1 2 7h5.5V6A1.5 1.5 0 0 1 6 4.5v-1zM1.5 10h1A1.5 1.5 0 0 1 4 11.5v1A1.5 1.5 0 0 1 2.5 14h-1A1.5 1.5 0 0 1 0 12.5v-1A1.5 1.5 0 0 1 1.5 10zm5 0h1A1.5 1.5 0 0 1 9 11.5v1A1.5 1.5 0 0 1 7.5 14h-1A1.5 1.5 0 0 1 5 12.5v-1A1.5 1.5 0 0 1 6.5 10zm5 0h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1A1.5 1.5 0 0 1 10 12.5v-1a1.5 1.5 0 0 1 1.5-1.5z"/></svg></span>
+          <div class="lane-title" style="color:var(--odoo-gold);">Integración Total</div>
+          <ul class="lane-steps">
+            <li>Un solo sistema para todos los departamentos</li>
+            <li>Trazabilidad 360° de cada transacción</li>
+            <li>Reportería en tiempo real unificada</li>
+            <li>Control de accesos por rol y área</li>
+            <li>Cero duplicación de datos entre módulos</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODULES SECTION -->
+<section class="modules-section" id="modulos" style="background: rgba(0,0,0,0.2);">
+  <div class="container">
+    <div class="text-center mb-5 reveal">
+      <div class="section-eyebrow">Requerimiento CORESA</div>
+      <h2 class="section-title">MÓDULOS <span class="hi">NECESARIOS</span></h2>
+      <p class="mt-3" style="color:var(--text-muted);max-width:560px;margin:auto;font-size:.9rem;">
+        Basado en el análisis del flujo Order-to-Delivery, estos son los 5 módulos que CORESA requiere para operar de manera eficiente.
+      </p>
+    </div>
+    <div class="row g-4">
+
+      <!-- Módulo 1: Ventas -->
+      <div class="col-md-6 col-xl-4 reveal">
+        <div class="module-card h-100">
+          <span class="module-badge">Esencial</span>
+          <div class="module-icon-wrap" style="background:rgba(245,166,35,0.15);"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="#F5A623" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M10.854 8.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708 0z"/><path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5z"/></svg></div>
+          <h4>Sales — Ventas</h4>
+          <p>Gestiona el ciclo de vida completo de ventas, desde cotizaciones hasta pedidos confirmados. Conecta automáticamente con inventario y facturación sin intervención manual.</p>
+          <div>
+            <span class="feature-pill">Presupuestos</span>
+            <span class="feature-pill">Pedidos de Venta</span>
+            <span class="feature-pill">Portal de Cliente</span>
+            <span class="feature-pill">Productos & Tarifas</span>
+            <span class="feature-pill">Seguimiento</span>
+          </div>
+          <div class="mt-3 pt-3" style="border-top:1px solid var(--border);">
+            <div style="font-size:.75rem;color:var(--text-muted);">Proceso que habilita:</div>
+            <div style="font-size:.8rem;color:var(--odoo-gold);margin-top:4px;">Presupuesto → Confirmación → Albarán automático</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Módulo 2: Inventario -->
+      <div class="col-md-6 col-xl-4 reveal">
+        <div class="module-card h-100">
+          <span class="module-badge">Esencial</span>
+          <div class="module-icon-wrap" style="background:rgba(1,126,132,0.15);"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="#017E84" viewBox="0 0 16 16"><path d="M7.752.066a.5.5 0 0 1 .496 0l3.75 2.143a.5.5 0 0 1 .252.434v3.995l3.498 2A.5.5 0 0 1 16 9.07v4.286a.5.5 0 0 1-.252.434l-3.75 2.143a.5.5 0 0 1-.496 0l-3.502-2-3.502 2a.5.5 0 0 1-.496 0l-3.75-2.143A.5.5 0 0 1 0 13.357V9.071a.5.5 0 0 1 .252-.434L3.75 6.638V2.643a.5.5 0 0 1 .252-.434L7.752.066ZM4.25 7.504 1.508 9.071l2.742 1.567 2.742-1.567L4.25 7.504ZM7.5 9.933l-2.75 1.571v3.134l2.75-1.571V9.933Zm1 3.134 2.75 1.571v-3.134L8.5 9.933v3.134Zm.508-3.996 2.742 1.567 2.742-1.567-2.742-1.567-2.742 1.567Zm1.242-2.433V3.504L8 5.076 5.75 3.504v3.134l2.25 1.286 2.25-1.286ZM8 4.07l2.742-1.567L8 .936 5.258 2.503 8 4.07Z"/></svg></div>
+          <h4>Inventory — Inventario</h4>
+          <p>Control total del almacén con múltiples ubicaciones, rutas de picking y reglas de reabastecimiento. Gestión de entradas, salidas y transferencias internas en tiempo real.</p>
+          <div>
+            <span class="feature-pill">Multi-Almacén</span>
+            <span class="feature-pill">Rutas de Picking</span>
+            <span class="feature-pill">Lotes & Series</span>
+            <span class="feature-pill">Albaranes</span>
+            <span class="feature-pill">Reglas de Reorder</span>
+          </div>
+          <div class="mt-3 pt-3" style="border-top:1px solid var(--border);">
+            <div style="font-size:.75rem;color:var(--text-muted);">Proceso que habilita:</div>
+            <div style="font-size:.8rem;color:var(--odoo-accent);margin-top:4px;">Verificación stock → Albarán Salida → Gestión WH</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Módulo 3: Fabricación -->
+      <div class="col-md-6 col-xl-4 reveal">
+        <div class="module-card h-100">
+          <span class="module-badge">Esencial</span>
+          <div class="module-icon-wrap" style="background:rgba(113,75,103,0.2);"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="#B06EA0" viewBox="0 0 16 16"><path d="M7.068.727c.243-.97 1.62-.97 1.864 0l.071.286a.96.96 0 0 0 1.622.434l.205-.211c.695-.719 1.888-.03 1.613.931l-.08.284a.96.96 0 0 0 1.187 1.187l.283-.081c.96-.275 1.65.918.931 1.613l-.211.205a.96.96 0 0 0 .434 1.622l.286.071c.97.243.97 1.62 0 1.864l-.286.071a.96.96 0 0 0-.434 1.622l.211.205c.719.695.03 1.888-.931 1.613l-.284-.08a.96.96 0 0 0-1.187 1.187l.081.283c.275.96-.918 1.65-1.613.931l-.205-.211a.96.96 0 0 0-1.622.434l-.071.286c-.243.97-1.62.97-1.864 0l-.071-.286a.96.96 0 0 0-1.622-.434l-.205.211c-.695.719-1.888.03-1.613-.931l.08-.284a.96.96 0 0 0-1.187-1.187l-.283.081c-.96.275-1.65-.918-.931-1.613l.211-.205a.96.96 0 0 0-.434-1.622l-.286-.071c-.97-.243-.97-1.62 0-1.864l.286-.071a.96.96 0 0 0 .434-1.622l-.211-.205c-.719-.695-.03-1.888.931-1.613l.284.08a.96.96 0 0 0 1.187-1.187l-.081-.283c-.275-.96.918-1.65 1.613-.931l.205.211a.96.96 0 0 0 1.622-.434l.071-.286zM8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z"/></svg></div>
+          <h4>Manufacturing — Fabricación</h4>
+          <p>Planificación y control de producción con listas de materiales, órdenes de fabricación y rutas de trabajo. Control de calidad en proceso (WIP) integrado.</p>
+          <div>
+            <span class="feature-pill">BOM (Listas Mat.)</span>
+            <span class="feature-pill">Órdenes de Fab.</span>
+            <span class="feature-pill">Rutas de Trabajo</span>
+            <span class="feature-pill">Control Calidad</span>
+            <span class="feature-pill">WIP</span>
+          </div>
+          <div class="mt-3 pt-3" style="border-top:1px solid var(--border);">
+            <div style="font-size:.75rem;color:var(--text-muted);">Proceso que habilita:</div>
+            <div style="font-size:.8rem;color:var(--odoo-purple);margin-top:4px;">OF → BOM → Orden Trabajo → Cierre → QC</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Módulo 4: Compras -->
+      <div class="col-md-6 col-xl-4 reveal">
+        <div class="module-card h-100">
+          <span class="module-badge">Esencial</span>
+          <div class="module-icon-wrap" style="background:rgba(40,182,124,0.15);"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="#28B67C" viewBox="0 0 16 16"><path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5v-7zm1.294 7.456A1.999 1.999 0 0 1 4.732 11h5.536a2.01 2.01 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456zM12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12v4zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/></svg></div>
+          <h4>Purchase — Compras</h4>
+          <p>Automatiza el proceso de abastecimiento desde la solicitud de presupuesto (RFQ) hasta la recepción y validación de mercancía. Se conecta directamente con contabilidad.</p>
+          <div>
+            <span class="feature-pill">RFQ Automático</span>
+            <span class="feature-pill">Pedidos de Compra</span>
+            <span class="feature-pill">Gestión Proveedores</span>
+            <span class="feature-pill">Recepción</span>
+            <span class="feature-pill">3-Way Matching</span>
+          </div>
+          <div class="mt-3 pt-3" style="border-top:1px solid var(--border);">
+            <div style="font-size:.75rem;color:var(--text-muted);">Proceso que habilita:</div>
+            <div style="font-size:.8rem;color:var(--odoo-green);margin-top:4px;">RFQ → Cotización → PO → Envío → Recepción</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Módulo 5: Contabilidad -->
+      <div class="col-md-6 col-xl-4 reveal">
+        <div class="module-card h-100">
+          <span class="module-badge">Esencial</span>
+          <div class="module-icon-wrap" style="background:rgba(84,105,212,0.2);"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="#7B8EF5" viewBox="0 0 16 16"><path d="M11 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h1V7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7h1V2z"/></svg></div>
+          <h4>Accounting — Contabilidad</h4>
+          <p>Contabilidad completa con automatización de asientos, facturación a clientes y proveedores, gestión de tesorería y conciliación bancaria integrada.</p>
+          <div>
+            <span class="feature-pill">Facturación</span>
+            <span class="feature-pill">Asientos Automáticos</span>
+            <span class="feature-pill">Tesorería</span>
+            <span class="feature-pill">Conciliación</span>
+            <span class="feature-pill">Reportes</span>
+          </div>
+          <div class="mt-3 pt-3" style="border-top:1px solid var(--border);">
+            <div style="font-size:.75rem;color:var(--text-muted);">Proceso que habilita:</div>
+            <div style="font-size:.8rem;color:#7B8EF5;margin-top:4px;">Factura → Envío → Matching → Pago → Asiento</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Módulo Bonus: CRM -->
+      <div class="col-md-6 col-xl-4 reveal">
+        <div class="module-card h-100" style="border-color:rgba(245,166,35,0.25);">
+          <span class="module-badge" style="background:rgba(245,166,35,0.1);border-color:rgba(245,166,35,0.3);color:var(--odoo-gold);">Recomendado</span>
+          <div class="module-icon-wrap" style="background:rgba(245,166,35,0.1);"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="var(--odoo-gold)" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5Z"/></svg></div>
+          <h4>CRM — Oportunidades</h4>
+          <p>Gestión de pipeline de ventas, seguimiento de oportunidades y automatización de comunicaciones con clientes. Complementa perfectamente el módulo de Ventas.</p>
+          <div>
+            <span class="feature-pill">Pipeline Visual</span>
+            <span class="feature-pill">Seguimiento</span>
+            <span class="feature-pill">Email Automático</span>
+            <span class="feature-pill">Reportes Ventas</span>
+          </div>
+          <div class="mt-3 pt-3" style="border-top:1px solid var(--border);">
+            <div style="font-size:.75rem;color:var(--text-muted);">Proceso que habilita:</div>
+            <div style="font-size:.8rem;color:var(--odoo-gold);margin-top:4px;">Lead → Oportunidad → Pedido de Venta</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- INTEGRATION DIAGRAM -->
+<section class="flow-section" id="integracion">
+  <div class="container">
+    <div class="text-center mb-5 reveal">
+      <div class="section-eyebrow">Arquitectura</div>
+      <h2 class="section-title">FLUJO <span class="hi">INTEGRADO</span></h2>
+    </div>
+    <div class="reveal">
+      <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:20px;padding:40px 30px;">
+        <!-- Header Row -->
+        <div class="row g-2 mb-3">
+          <div class="col"><div class="text-center p-2 rounded" style="background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.3);font-size:.7rem;font-weight:600;letter-spacing:2px;color:#F5A623;">VENTAS</div></div>
+          <div class="col"><div class="text-center p-2 rounded" style="background:rgba(1,126,132,0.1);border:1px solid rgba(1,126,132,0.3);font-size:.7rem;font-weight:600;letter-spacing:2px;color:#017E84;">INVENTARIO</div></div>
+          <div class="col"><div class="text-center p-2 rounded" style="background:rgba(113,75,103,0.15);border:1px solid rgba(113,75,103,0.4);font-size:.7rem;font-weight:600;letter-spacing:2px;color:#B06EA0;">FABRICACIÓN</div></div>
+          <div class="col"><div class="text-center p-2 rounded" style="background:rgba(40,182,124,0.1);border:1px solid rgba(40,182,124,0.3);font-size:.7rem;font-weight:600;letter-spacing:2px;color:#28B67C;">COMPRAS</div></div>
+          <div class="col"><div class="text-center p-2 rounded" style="background:rgba(84,105,212,0.1);border:1px solid rgba(84,105,212,0.3);font-size:.7rem;font-weight:600;letter-spacing:2px;color:#7B8EF5;">CONTAB.</div></div>
+        </div>
+        <!-- Rows -->
+        <div class="row g-2 mb-2">
+          <div class="col"><div class="flow-node" style="border-color:rgba(245,166,35,0.3);">Presupuesto</div></div>
+          <div class="col"><div class="flow-node" style="border-color:rgba(1,126,132,0.3);">Verif. Stock</div></div>
+          <div class="col"><div class="flow-node" style="border-color:rgba(113,75,103,0.4);">Generar OF</div></div>
+          <div class="col"><div class="flow-node" style="border-color:rgba(40,182,124,0.3);">Crear RFQ</div></div>
+          <div class="col"><div class="flow-node" style="border-color:rgba(84,105,212,0.3);">Crear Factura</div></div>
+        </div>
+        <div class="row g-2 mb-2">
+          <div class="col"><div class="flow-node" style="border-color:rgba(245,166,35,0.3);">Confirmar Pedido</div></div>
+          <div class="col"><div class="flow-node" style="border-color:rgba(1,126,132,0.3);">Albarán Salida</div></div>
+          <div class="col"><div class="flow-node" style="border-color:rgba(113,75,103,0.4);">BOM & Validar</div></div>
+          <div class="col"><div class="flow-node" style="border-color:rgba(40,182,124,0.3);">Confirmar PO</div></div>
+          <div class="col"><div class="flow-node" style="border-color:rgba(84,105,212,0.3);">Enviar Cliente</div></div>
+        </div>
+        <div class="row g-2 mb-2">
+          <div class="col"><div class="flow-node" style="background:rgba(245,166,35,0.08);border-color:rgba(245,166,35,0.5);color:#F5A623;">Pedido Confirmado ✓</div></div>
+          <div class="col"><div class="flow-node" style="border-color:rgba(1,126,132,0.3);">Plan. Ruta</div></div>
+          <div class="col"><div class="flow-node" style="border-color:rgba(113,75,103,0.4);">Orden Trabajo</div></div>
+          <div class="col"><div class="flow-node" style="border-color:rgba(40,182,124,0.3);">Enviar Proveedor</div></div>
+          <div class="col"><div class="flow-node" style="border-color:rgba(84,105,212,0.3);">Matching 3-vías</div></div>
+        </div>
+        <div class="row g-2 mb-2">
+          <div class="col"><div class="flow-node" style="background:transparent;border-color:transparent;"></div></div>
+          <div class="col"><div class="flow-node" style="border-color:rgba(1,126,132,0.3);">Recep. Mercancía</div></div>
+          <div class="col"><div class="flow-node" style="border-color:rgba(113,75,103,0.4);">Control Calidad</div></div>
+          <div class="col"><div class="flow-node" style="border-color:rgba(40,182,124,0.3);">Recep. Mercancía</div></div>
+          <div class="col"><div class="flow-node" style="border-color:rgba(84,105,212,0.3);">Registro Pago</div></div>
+        </div>
+        <div class="row g-2">
+          <div class="col"><div class="flow-node" style="background:transparent;border-color:transparent;"></div></div>
+          <div class="col"><div class="flow-node" style="background:rgba(1,126,132,0.1);border-color:rgba(1,126,132,0.5);color:#017E84;">Gestión WH ✓</div></div>
+          <div class="col"><div class="flow-node" style="background:rgba(113,75,103,0.1);border-color:rgba(113,75,103,0.6);color:#B06EA0;">Prod. Cerrada ✓</div></div>
+          <div class="col"><div class="flow-node" style="background:rgba(40,182,124,0.1);border-color:rgba(40,182,124,0.5);color:#28B67C;">Pedido Recibido ✓</div></div>
+          <div class="col"><div class="flow-node" style="background:rgba(84,105,212,0.1);border-color:rgba(84,105,212,0.5);color:#7B8EF5;">Asiento Contable ✓</div></div>
+        </div>
+        <!-- Central label -->
+        <div class="text-center mt-4 pt-3" style="border-top:1px solid var(--border);">
+          <span style="font-size:.75rem;color:var(--text-muted);">Todos los módulos comparten una base de datos unificada en</span>
+          <span style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--odoo-gold);margin-left:6px;">Odoo 17 ERP</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPLEMENTATION TIMELINE -->
+<section class="timeline-section" id="implementacion" style="background:rgba(0,0,0,0.15);">
+  <div class="container">
+    <div class="row g-5 align-items-start">
+      <div class="col-lg-4 reveal">
+        <div class="section-eyebrow">Hoja de Ruta</div>
+        <h2 class="section-title">PLAN DE<br/><span class="hi">IMPLEMENTACIÓN</span></h2>
+        <p class="mt-3" style="color:var(--text-muted);font-size:.9rem;line-height:1.7;">
+          Una implementación estructurada por fases garantiza la adopción exitosa y minimiza la interrupción operativa de CORESA.
+        </p>
+        <div class="mt-4 p-4" style="background:var(--card-bg);border:1px solid var(--border);border-radius:12px;">
+          <div style="font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;">Duración estimada</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--odoo-gold);line-height:1;">3–4</div>
+          <div style="color:var(--text-muted);font-size:.85rem;">meses para go-live completo</div>
+        </div>
+      </div>
+      <div class="col-lg-8 reveal">
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-phase">Fase 1 — Semanas 1-3</div>
+            <div class="timeline-title">Análisis & Configuración Base</div>
+            <div class="timeline-desc">Instalación de Odoo 17, mapeo de procesos actuales de CORESA, configuración de catálogo de productos, proveedores y clientes. Parametrización de módulos de Ventas e Inventario.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-phase" style="color:var(--odoo-accent);">Fase 2 — Semanas 4-7</div>
+            <div class="timeline-title">Fabricación & Compras</div>
+            <div class="timeline-desc">Configuración de Listas de Materiales (BOM), rutas de producción, centros de trabajo. Flujos de compras, relaciones con proveedores y reglas de reabastecimiento automático.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-phase" style="color:var(--odoo-purple);">Fase 3 — Semanas 8-10</div>
+            <div class="timeline-title">Contabilidad & Integración</div>
+            <div class="timeline-desc">Plan de cuentas, configuración fiscal (El Salvador), automatización de asientos contables, conciliación bancaria y reportería financiera integrada con todas las operaciones.</div>
+          </div>
+          <div class="timeline-item" style="padding-bottom:0;">
+            <div class="timeline-phase" style="color:var(--odoo-green);">Fase 4 — Semanas 11-14</div>
+            <div class="timeline-title">Capacitación & Go-Live</div>
+            <div class="timeline-desc">Entrenamiento por módulo a equipos de CORESA, pruebas de usuario final (UAT), migración de datos históricos y puesta en producción con soporte dedicado.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contacto">
+  <div class="container position-relative">
+    <div class="reveal">
+      <div class="section-eyebrow">¿Listo para avanzar?</div>
+      <h2 class="section-title">
+        TRANSFORMA<br/>
+        <span class="hi">CORESA</span><br/>
+        HOY
+      </h2>
+      <p class="mt-4 mb-5" style="color:var(--text-muted);font-size:1rem;max-width:480px;margin:auto 20px;line-height:1.7;">
+        Odoo 17 es la solución que unificará todas las operaciones de CORESA en una sola plataforma, eliminando silos y duplicación de datos.
+      </p>
+      <div class="d-flex gap-3 justify-content-center flex-wrap mt-4">
+        <a href="http://3.149.3.222:8068/web/login?db=coresa_prueba" target="_blank" class="btn-primary-custom" style="font-size:1rem;padding:16px 40px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 8c.828 0 1.5-.895 1.5-2S8.828 4 8 4s-1.5.895-1.5 2S7.172 8 8 8Z"/><path d="M11.953 8.81c.112-.281.047-.987-.322-2.359.114-.205.234-.421.361-.648.902-1.610 1.884-3.504.985-5.137-.264-.483-.752-.566-1.01-.566C10.524 0 9.385.982 8.45 2.312 8.3 2.51 8.15 2.72 8.007 2.937a13.138 13.138 0 0 0-2.096-.138C1.974 2.8.5 5 .5 8c0 3 1.474 5.2 5.411 5.2a12.97 12.97 0 0 0 2.096-.138c.144.218.294.427.443.625C9.385 15.018 10.523 16 11.967 16c.257 0 .745-.082 1.01-.566.898-1.633-.084-3.527-.985-5.137a17.119 17.119 0 0 0-.039-.487Zm-4.028 2.285A11.944 11.944 0 0 1 5.91 11.2C2.686 11.2 1.5 9.5 1.5 8s1.186-3.2 4.41-3.2a11.86 11.86 0 0 1 2.014.095c-.166.39-.307.794-.41 1.207-.362 1.472-.427 2.178-.315 2.459-.112.281-.047.987.315 2.459.103.413.244.817.41 1.207-.002-.001-.001 0 0 0Z"/></svg> Iniciar Proyecto
+        </a>
+        <a href="http://3.149.3.222:8068/web/login?db=coresa_prueba" target="_blank" class="btn-outline-custom" style="font-size:1rem;padding:16px 40px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z"/></svg> Ver Demo
+        </a>
+      </div>
+      <!-- Module Summary -->
+      <div class="row g-3 mt-5 justify-content-center">
+        <div class="col-auto">
+          <div style="background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.3);border-radius:8px;padding:10px 20px;font-size:.82rem;color:#F5A623;">🛒 Sales</div>
+        </div>
+        <div class="col-auto">
+          <div style="background:rgba(1,126,132,0.1);border:1px solid rgba(1,126,132,0.3);border-radius:8px;padding:10px 20px;font-size:.82rem;color:#017E84;">📦 Inventory</div>
+        </div>
+        <div class="col-auto">
+          <div style="background:rgba(113,75,103,0.15);border:1px solid rgba(113,75,103,0.4);border-radius:8px;padding:10px 20px;font-size:.82rem;color:#B06EA0;">⚙️ Manufacturing</div>
+        </div>
+        <div class="col-auto">
+          <div style="background:rgba(40,182,124,0.1);border:1px solid rgba(40,182,124,0.3);border-radius:8px;padding:10px 20px;font-size:.82rem;color:#28B67C;">🤝 Purchase</div>
+        </div>
+        <div class="col-auto">
+          <div style="background:rgba(84,105,212,0.1);border:1px solid rgba(84,105,212,0.3);border-radius:8px;padding:10px 20px;font-size:.82rem;color:#7B8EF5;">📊 Accounting</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-4">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:3px;">
+          CORE<span style="color:var(--odoo-gold);">SA</span> × <span style="color:var(--odoo-purple);">ODOO</span>
+        </div>
+      </div>
+      <div class="col-md-4 text-center">
+        <div style="color:var(--text-muted);font-size:.78rem;">Propuesta de Implementación · Odoo 17 · 2025</div>
+      </div>
+      <div class="col-md-4 text-md-end">
+        <div style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--text-muted);">Order-to-Delivery · 5 Módulos Integrados</div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Navbar scroll effect
+  window.addEventListener('scroll', () => {
+    document.querySelector('.navbar').style.background =
+      window.scrollY > 50 ? 'rgba(28,28,46,0.98)' : 'rgba(28,28,46,0.85)';
+  });
+
+  // Animated counters
+  const counters = document.querySelectorAll('.stat-num');
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.animation = 'fadeUp .6s ease both';
+        counterObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  counters.forEach(el => counterObserver.observe(el));
+</script>
+</body>
+</html>
